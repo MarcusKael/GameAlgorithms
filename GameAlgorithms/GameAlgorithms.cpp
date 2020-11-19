@@ -83,6 +83,7 @@ void printSolution(int sol[10][10]) {
         cout << "\n";
     }
 
+    // dkajlsd
     solLen(sol);
 }
 
