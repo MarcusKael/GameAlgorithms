@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <cmath>
+#include <fstream>
+#include <cstdlib>
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -49,7 +52,6 @@ vector<int> insertionSort(vector<int> arr) {
     return arr;
 }
 
-int N = 10;
 int chebyshevDistance(int maze[10][10], int x1, int y1, int x2, int y2) {
     if (maze[x1][y1] > 1) {
         return 100000;
@@ -83,15 +85,14 @@ void printSolution(int sol[10][10]) {
         cout << "\n";
     }
 
-    // dkajlsd
     solLen(sol);
 }
 
 bool isSafe(int maze[10][10], int x, int y, int g_x, int g_y, int sol[10][10], vector<int> distances, int iteration) {
-    cout << "\n Testing coordinates (isSafe): (" << x << ", " << y << ")" << endl;
+    // cout << "\n Testing coordinates (isSafe): (" << x << ", " << y << ")" << endl;
 
     if (x >= 0 && x < 10 && y >= 0 && y < 10 && maze[x][y] >= 0 && sol[x][y] != 1 && chebyshevDistance(maze, x, y, g_x, g_y) <= distances[iteration] && maze[x][y] != 2) {
-        cout << "\n Coordenada valida \n";
+        // cout << "\n Coordenada valida \n";
         return true;
     }
     // cout << "\n Coordenada no es valida \n";
@@ -141,7 +142,7 @@ bool solveMazeUtil(int maze[10][10], int x, int y, int g_x, int g_y, int sol[10]
 
             printArray(distances_the_revenge, distances_the_revenge.size());
 
-            /* cout << "\n Distances size: " << distances.size() << endl;
+            cout << "\n Distances size: " << distances.size() << endl;
 
             cout << "\n i value: " << i << endl;
 
@@ -214,21 +215,34 @@ bool solveMaze(int maze[10][10], int x, int y, int g_x, int g_y, int limit, bool
     return true;
 }
 
+void readFile(string fileName, int matrix[10][10]) {
+    ifstream mazeFile;
+    // string fileName = "mazeFile.txt";
+    mazeFile.open(fileName, ios::in);
+
+    // Checking error
+    if (mazeFile.fail()) {
+        cout << "Error opening file" << endl;
+        exit(0);
+    }
+
+    int SIZE = 10, i = 0, j = 0;
+
+    for (i = 0; i < SIZE; i++) {
+        for (j = 0; j < SIZE; j++) {
+            mazeFile >> matrix[i][j];
+        }
+    }
+    mazeFile.close();
+}
+
 int main()
-{
-    int maze[10][10] = {{0, 0, 0, 0, 0, 0, 2, 0, 2, 1},
-                        {0, 0, 0, 0, 2, 0, 0, 0, 0, 0},
-                        {0, 2, 2, 0, 2, 2, 2, 2, 0, 0},
-                        {0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 2, 2, 2, 2, 2, 2},
-                        {0, 0, 0, 2, 2, 2, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {2, 0, 2, 2, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 1, 0, 2, 0, 0, 0, 0, 0}};
-    
+{   
+    int maze[10][10];
+
+    readFile("mazeFile.txt", maze);
+
     solveMaze(maze, 9, 2, 0, 9, 20, false);
-    
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
